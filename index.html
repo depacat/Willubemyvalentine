@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Desktop</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;900&display=swap" rel="stylesheet">
+
+<style>
+
+/* ---------- BASE ---------- */
+
+body{
+margin:0;
+height:100vh;
+background:#ffe6f0;
+font-family:Quicksand;
+overflow:hidden;
+}
+
+button{cursor:pointer}
+
+/* ---------- TASKBAR ---------- */
+
+#taskbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:45px;
+background:#FF69B4;
+display:flex;
+align-items:center;
+gap:10px;
+padding:0 10px;
+z-index:99999;
+}
+
+.task-btn{
+background:white;
+border:none;
+padding:6px 12px;
+border-radius:10px;
+}
+
+/* ---------- WINDOWS ---------- */
+
+.window{
+position:absolute;
+background:#fff0f7;
+border:3px solid #d94a98;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+overflow:hidden;
+}
+
+.window-header{
+height:36px;
+background:#FF69B4;
+color:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 10px;
+cursor:grab;
+}
+
+.window-body{padding:20px;text-align:center}
+
+/* ---------- MAIN WINDOW ---------- */
+
+#mainWindow{
+width:520px;
+height:520px;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+}
+
+/* ---------- LETTER ---------- */
+
+.center-wrap{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100%;
+gap:15px;
+}
+
+#letter-wrapper{
+position:relative;
+width:260px;
+}
+
+#letter{width:100%}
+
+#heart{
+position:absolute;
+width:60px;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+animation:pulse 1s infinite;
+cursor:pointer;
+}
+
+@keyframes pulse{
+0%{transform:translate(-50%,-50%) scale(1)}
+50%{transform:translate(-50%,-50%) scale(1.2)}
+100%{transform:translate(-50%,-50%) scale(1)}
+}
+
+/* ---------- CAT ---------- */
+
+#cat-container{
+display:none;
+flex-direction:column;
+align-items:center;
+gap:15px;
+}
+
+#cat{width:260px}
+#question{font-size:24px;font-weight:900;color:#d94a98}
+
+/* ---------- BUTTONS ---------- */
+
+#yes{
+background:#FF69B4;
+color:white;
+border:none;
+padding:12px 24px;
+border-radius:20px;
+display:none;
+}
+
+#no{
+background:#ffd6ea;
+position:fixed;
+display:none;
+padding:12px 24px;
+border:none;
+border-radius:20px;
+z-index:9999;
+}
+
+/* ---------- MUSIC PLAYER ---------- */
+
+.music-controls{
+display:flex;
+justify-content:center;
+gap:15px;
+margin:10px 0;
+}
+
+.music-controls img{
+width:40px;
+cursor:pointer;
+}
+
+#progress{
+width:240px;
+height:8px;
+background:#ffd6ea;
+border-radius:10px;
+margin:auto;
+position:relative;
+cursor:pointer;
+}
+
+#progress-fill{
+height:100%;
+width:0%;
+background:#FF69B4;
+border-radius:10px;
+}
+
+/* ---------- FOLDERS ---------- */
+
+.folder{
+display:inline-block;
+margin:10px;
+cursor:pointer;
+}
+
+.folder img{width:80px}
+
+.thumb{
+width:120px;
+margin:5px;
+border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TASKBAR -->
+
+<div id="taskbar">
+<button class="task-btn" onclick="toggleWindow('mainWindow')">love_letter</button>
+<button class="task-btn" onclick="toggleWindow('musicWindow')">music</button>
+<button class="task-btn" onclick="toggleWindow('folderWindow')">folders</button>
+</div>
+
+<!-- MAIN WINDOW -->
+
+<div class="window" id="mainWindow">
+<div class="window-header">love_letter.exe</div>
+
+<div class="window-body">
+<div class="center-wrap">
+
+<div id="letter-wrapper">
+<img id="letter" src="assets/letter_closed.png">
+<img id="heart" src="assets/heart.png">
+</div>
+
+<button id="yes">YES</button>
+
+<div id="cat-container">
+<img id="cat" src="assets/cat.jpg">
+<div id="question">YOU HAVE NO CHOICE</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- MUSIC WINDOW -->
+
+<div class="window" id="musicWindow" style="top:80px;left:60px;width:300px">
+<div class="window-header">music_player</div>
+
+<div class="window-body">
+
+<div class="music-controls">
+<img src="assets/prev.png" id="prevBtn">
+<img src="assets/play.png" id="playBtn">
+<img src="assets/next.png" id="nextBtn">
+</div>
+
+<div id="progress">
+<div id="progress-fill"></div>
+</div>
+
+</div>
+</div>
+
+<!-- FOLDER WINDOW -->
+
+<div class="window" id="folderWindow" style="top:120px;left:420px;width:360px;height:340px">
+<div class="window-header">folders</div>
+
+<div class="window-body" id="folderContent">
+
+<div class="folder" onclick="openFolder('aespo')">
+<img src="assets/aespo.png"><br>aespo
+</div>
+
+<div class="folder" onclick="openFolder('love')">
+<img src="assets/folder.png"><br>&lt;3
+</div>
+
+</div>
+</div>
+
+<button id="no">NO</button>
+
+<audio id="openSound" src="assets/open.mp3"></audio>
+<audio id="hoverSound" src="assets/hover.mp3"></audio>
+<audio id="player"></audio>
+
+<script>
+
+/* ---------- DRAG WINDOWS ---------- */
+
+let z=10;
+
+document.querySelectorAll(".window").forEach(win=>{
+const header=win.querySelector(".window-header");
+let drag=false,x,y;
+
+header.onmousedown=e=>{
+drag=true;
+x=e.clientX-win.offsetLeft;
+y=e.clientY-win.offsetTop;
+win.style.zIndex=++z;
+};
+
+document.onmousemove=e=>{
+if(!drag)return;
+win.style.left=e.clientX-x+"px";
+win.style.top=e.clientY-y+"px";
+win.style.transform="none";
+};
+
+document.onmouseup=()=>drag=false;
+});
+
+/* ---------- WINDOW CONTROL ---------- */
+
+function toggleWindow(id){
+let w=document.getElementById(id);
+w.style.display=w.style.display==="none"?"block":"none";
+}
+
+/* ---------- LETTER ---------- */
+
+const heart=document.getElementById("heart");
+const letter=document.getElementById("letter");
+const yesBtn=document.getElementById("yes");
+const noBtn=document.getElementById("no");
+const catContainer=document.getElementById("cat-container");
+
+let opened=false,escaped=0;
+
+heart.onclick=()=>{
+if(opened)return;
+opened=true;
+
+openSound.play();
+letter.src="assets/letter_open.png";
+heart.style.display="none";
+
+yesBtn.style.display="block";
+
+noBtn.style.display="block";
+noBtn.style.left="50%";
+noBtn.style.top="60%";
+};
+
+noBtn.onmouseover=()=>{
+if(!opened)return;
+
+if(escaped<3){
+noBtn.style.left=Math.random()*(window.innerWidth-120)+"px";
+noBtn.style.top=Math.random()*(window.innerHeight-60)+"px";
+escaped++;
+}else{
+letter.style.display="none";
+yesBtn.style.display="none";
+catContainer.style.display="flex";
+noBtn.style.display="none";
+catContainer.appendChild(yesBtn);
+yesBtn.style.display="block";
+}
+};
+
+/* ---------- MUSIC PLAYER ---------- */
+
+const playlist=[
+"assets/sun_and_moon.mp3",
+"assets/forever.mp3",
+"assets/i_love_u.mp3"
+];
+
+let currentTrack=0;
+const player=document.getElementById("player");
+const playBtn=document.getElementById("playBtn");
+const nextBtn=document.getElementById("nextBtn");
+const prevBtn=document.getElementById("prevBtn");
+const progress=document.getElementById("progress");
+const fill=document.getElementById("progress-fill");
+
+function loadTrack(i){
+currentTrack=i;
+player.src=playlist[currentTrack];
+player.play();
+}
+
+playBtn.onclick=()=>{
+if(player.paused){player.play();playBtn.src="assets/pause.png";}
+else{player.pause();playBtn.src="assets/play.png";}
+};
+
+nextBtn.onclick=()=>{
+currentTrack=(currentTrack+1)%playlist.length;
+loadTrack(currentTrack);
+};
+
+prevBtn.onclick=()=>{
+currentTrack=(currentTrack-1+playlist.length)%playlist.length;
+loadTrack(currentTrack);
+};
+
+player.addEventListener("timeupdate",()=>{
+const percent=(player.currentTime/player.duration)*100;
+fill.style.width=percent+"%";
+});
+
+progress.onclick=e=>{
+const rect=progress.getBoundingClientRect();
+const percent=(e.clientX-rect.left)/rect.width;
+player.currentTime=percent*player.duration;
+};
+
+player.addEventListener("ended",()=>{
+currentTrack=(currentTrack+1)%playlist.length;
+loadTrack(currentTrack);
+});
+
+/* ---------- FOLDERS ---------- */
+
+function openFolder(name){
+
+const content=document.getElementById("folderContent");
+
+if(name==="aespo"){
+content.innerHTML=`
+<h3>aespo</h3>
+<img src="assets/a1.jpg" class="thumb">
+<img src="assets/a2.jpg" class="thumb">
+<img src="assets/a3.jpg" class="thumb">
+<br><button onclick="location.reload()">back</button>
+`;
+}
+
+if(name==="love"){
+content.innerHTML=`
+<h3>&lt;3</h3>
+<img src="assets/l1.jpg" class="thumb">
+<img src="assets/l2.jpg" class="thumb">
+<br><button onclick="location.reload()">back</button>
+`;
+}
+
+}
+
+</script>
+
+</body>
+</html>
