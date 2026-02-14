@@ -8,12 +8,22 @@
 
 <style>
 
+/* ---------- PALETTE ---------- */
+
+:root{
+--pink1:#e58ad1;
+--pink2:#c75fa6;
+--pink3:#fae8f6;
+--pink4:#b072a3;
+--pink5:#fae8f6;
+}
+
 /* ---------- BASE ---------- */
 
 body{
 margin:0;
 height:100vh;
-background:#ffe6f0;
+background:var(--pink3);
 font-family:Quicksand;
 overflow:hidden;
 }
@@ -25,10 +35,9 @@ button{cursor:pointer}
 #taskbar{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
 height:45px;
-background:#FF69B4;
+background:var(--pink2);
 display:flex;
 align-items:center;
 gap:10px;
@@ -47,8 +56,8 @@ border-radius:10px;
 
 .window{
 position:absolute;
-background:#fff0f7;
-border:3px solid #d94a98;
+background:white;
+border:3px solid var(--pink2);
 border-radius:14px;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
 overflow:hidden;
@@ -56,7 +65,7 @@ overflow:hidden;
 
 .window-header{
 height:36px;
-background:#FF69B4;
+background:var(--pink1);
 color:white;
 display:flex;
 align-items:center;
@@ -65,19 +74,20 @@ padding:0 10px;
 cursor:grab;
 }
 
-.window-body{padding:20px;text-align:center}
+.window-body{
+padding:20px;
+text-align:center;
+}
 
 /* ---------- MAIN WINDOW ---------- */
 
 #mainWindow{
 width:520px;
-height:520px;
+height:600px;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
 }
-
-/* ---------- LETTER ---------- */
 
 .center-wrap{
 display:flex;
@@ -88,11 +98,9 @@ height:100%;
 gap:15px;
 }
 
-#letter-wrapper{
-position:relative;
-width:260px;
-}
+/* ---------- LETTER ---------- */
 
+#letter-wrapper{position:relative;width:260px}
 #letter{width:100%}
 
 #heart{
@@ -121,12 +129,11 @@ gap:15px;
 }
 
 #cat{width:260px}
-#question{font-size:24px;font-weight:900;color:#d94a98}
 
 /* ---------- BUTTONS ---------- */
 
 #yes{
-background:#FF69B4;
+background:var(--pink2);
 color:white;
 border:none;
 padding:12px 24px;
@@ -135,7 +142,7 @@ display:none;
 }
 
 #no{
-background:#ffd6ea;
+background:var(--pink3);
 position:fixed;
 display:none;
 padding:12px 24px;
@@ -144,7 +151,19 @@ border-radius:20px;
 z-index:9999;
 }
 
-/* ---------- MUSIC PLAYER ---------- */
+/* ---------- MUSIC ---------- */
+
+#musicWindow .window-body{
+background:var(--pink1);
+color:white;
+}
+
+#track-art{
+width:200px;
+height:200px;
+border-radius:15px;
+object-fit:cover;
+}
 
 .music-controls{
 display:flex;
@@ -153,15 +172,12 @@ gap:15px;
 margin:10px 0;
 }
 
-.music-controls img{
-width:40px;
-cursor:pointer;
-}
+.music-controls img{width:40px;cursor:pointer}
 
 #progress{
 width:240px;
 height:8px;
-background:#ffd6ea;
+background:var(--pink5);
 border-radius:10px;
 margin:auto;
 position:relative;
@@ -171,23 +187,39 @@ cursor:pointer;
 #progress-fill{
 height:100%;
 width:0%;
-background:#FF69B4;
+background:var(--pink2);
 border-radius:10px;
 }
 
-/* ---------- FOLDERS ---------- */
+#volume{width:200px;margin-top:10px}
+
+/* ---------- FOLDER WINDOW ---------- */
+
+.folder-body{
+height:260px;
+overflow:hidden;
+padding:0;
+display:flex;
+}
+
+#folderContent{
+flex:1;
+overflow-y:auto;
+padding:15px;
+}
 
 .folder{
 display:inline-block;
 margin:10px;
 cursor:pointer;
+text-align:center;
 }
 
-.folder img{width:80px}
+.folder img{width:70px}
 
 .thumb{
 width:120px;
-margin:5px;
+margin:6px;
 border-radius:10px;
 }
 
@@ -221,11 +253,26 @@ border-radius:10px;
 
 <div id="cat-container">
 <img id="cat" src="assets/cat.jpg">
-<div id="question">YOU HAVE NO CHOICE</div>
+<div style="font-weight:900">YOU HAVE NO CHOICE</div>
 </div>
 
 </div>
 </div>
+<div id="loveMessagePage" style="display:none; padding:30px; text-align:center;">
+    <h2 style="color:#c75fa6;">For You, my dummy 💌</h2>
+    <p id="loveText" style="margin-top:20px; font-size:18px; line-height:1.6;">
+        " Happy Valentine's Day to the one who holds the key to my heart! You're my darling boo, my partner in crime, and the love of my life. Every evanescent moment with you is my treasure, and I can't wait to create more beautiful memories together. Love u babe 💖
+        
+    </p>
+    <div style="margin-top:20px; font-size: small; opacity:0.8;">
+        P.S. It was my first time creating something like this, so I hope you like it! Even if you don't, just pretend you do, it took me a while to make this hehehe. Be a good boy and give me a kiss when you see me next time mwah!"
+    </div>    
+
+    <div style="margin-top:30px; font-size:12px; opacity:0.6;">
+        made with love by I.AM.YOUR.GF.CORPORATION ♡
+    </div>
+</div>
+
 </div>
 
 <!-- MUSIC WINDOW -->
@@ -235,15 +282,16 @@ border-radius:10px;
 
 <div class="window-body">
 
+<img id="track-art">
+
 <div class="music-controls">
 <img src="assets/prev.png" id="prevBtn">
 <img src="assets/play.png" id="playBtn">
 <img src="assets/next.png" id="nextBtn">
 </div>
 
-<div id="progress">
-<div id="progress-fill"></div>
-</div>
+<div id="progress"><div id="progress-fill"></div></div>
+<input type="range" id="volume" min="0" max="1" step="0.01" value="1">
 
 </div>
 </div>
@@ -251,26 +299,23 @@ border-radius:10px;
 <!-- FOLDER WINDOW -->
 
 <div class="window" id="folderWindow" style="top:120px;left:420px;width:360px;height:340px">
-<div class="window-header">folders</div>
-
-<div class="window-body" id="folderContent">
-
-<div class="folder" onclick="openFolder('aespo')">
-<img src="assets/aespo.png"><br>aespo
+<div class="window-header">
+folders
+<div>
+<button id="folderBackBtn">←</button>
+<button id="folderForwardBtn">→</button>
+</div>
 </div>
 
-<div class="folder" onclick="openFolder('love')">
-<img src="assets/folder.png"><br>&lt;3
-</div>
-
+<div class="window-body folder-body">
+<div id="folderContent"></div>
 </div>
 </div>
 
 <button id="no">NO</button>
 
-<audio id="openSound" src="assets/open.mp3"></audio>
-<audio id="hoverSound" src="assets/hover.mp3"></audio>
 <audio id="player"></audio>
+<audio id="openSound" src="assets/open.mp3"></audio>
 
 <script>
 
@@ -280,29 +325,30 @@ let z=10;
 
 document.querySelectorAll(".window").forEach(win=>{
 const header=win.querySelector(".window-header");
-let drag=false,x,y;
 
-header.onmousedown=e=>{
-drag=true;
+let dragging=false,x,y;
+
+header.addEventListener("mousedown",e=>{
+dragging=true;
 x=e.clientX-win.offsetLeft;
 y=e.clientY-win.offsetTop;
 win.style.zIndex=++z;
-};
+});
 
-document.onmousemove=e=>{
-if(!drag)return;
+document.addEventListener("mousemove",e=>{
+if(!dragging)return;
 win.style.left=e.clientX-x+"px";
 win.style.top=e.clientY-y+"px";
 win.style.transform="none";
-};
-
-document.onmouseup=()=>drag=false;
 });
 
-/* ---------- WINDOW CONTROL ---------- */
+document.addEventListener("mouseup",()=>dragging=false);
+});
+
+/* ---------- TOGGLE ---------- */
 
 function toggleWindow(id){
-let w=document.getElementById(id);
+const w=document.getElementById(id);
 w.style.display=w.style.display==="none"?"block":"none";
 }
 
@@ -314,16 +360,9 @@ const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
 const catContainer=document.getElementById("cat-container");
 
-let opened=false,escaped=0;
-
 heart.onclick=()=>{
-if(opened)return;
-opened=true;
-
-openSound.play();
 letter.src="assets/letter_open.png";
 heart.style.display="none";
-
 yesBtn.style.display="block";
 
 noBtn.style.display="block";
@@ -331,64 +370,85 @@ noBtn.style.left="50%";
 noBtn.style.top="60%";
 };
 
-noBtn.onmouseover=()=>{
-if(!opened)return;
+let escaped=0;
 
+noBtn.onmouseover=()=>{
 if(escaped<3){
 noBtn.style.left=Math.random()*(window.innerWidth-120)+"px";
 noBtn.style.top=Math.random()*(window.innerHeight-60)+"px";
 escaped++;
 }else{
 letter.style.display="none";
-yesBtn.style.display="none";
+heart.style.display="none";
+yesBtn.style.display="block";
 catContainer.style.display="flex";
 noBtn.style.display="none";
-catContainer.appendChild(yesBtn);
-yesBtn.style.display="block";
 }
 };
+
+yesBtn.onclick=()=>{
+    // полностью скрываем кнопку NO
+    noBtn.style.display="none";
+    noBtn.onmouseover=null;
+
+    // открываем страницу с посланием
+    document.querySelector(".center-wrap").style.display="none";
+    document.getElementById("loveMessagePage").style.display="block";
+};
+
+
 
 /* ---------- MUSIC PLAYER ---------- */
 
 const playlist=[
-"assets/sun_and_moon.mp3",
-"assets/forever.mp3",
-"assets/i_love_u.mp3"
+{src:"assets/sun_and_moon.mp3",art:"assets/sun_and_moon.jpg"},
+{src:"assets/forever.mp3",art:"assets/forever.jpg"},
+{src:"assets/i_love_u.mp3",art:"assets/i_love_u.jpg"}
 ];
 
-let currentTrack=0;
 const player=document.getElementById("player");
 const playBtn=document.getElementById("playBtn");
 const nextBtn=document.getElementById("nextBtn");
 const prevBtn=document.getElementById("prevBtn");
+const art=document.getElementById("track-art");
 const progress=document.getElementById("progress");
 const fill=document.getElementById("progress-fill");
+const volume=document.getElementById("volume");
+
+let currentTrack=0;
+let isPlaying=false;
 
 function loadTrack(i){
 currentTrack=i;
-player.src=playlist[currentTrack];
-player.play();
+player.src=playlist[i].src;
+art.src=playlist[i].art;
+player.load();
+if(isPlaying) player.play();
 }
 
+loadTrack(0);
+
 playBtn.onclick=()=>{
-if(player.paused){player.play();playBtn.src="assets/pause.png";}
-else{player.pause();playBtn.src="assets/play.png";}
+if(player.paused){
+player.play();
+playBtn.src="assets/pause.png";
+isPlaying=true;
+}else{
+player.pause();
+playBtn.src="assets/play.png";
+isPlaying=false;
+}
 };
 
-nextBtn.onclick=()=>{
-currentTrack=(currentTrack+1)%playlist.length;
-loadTrack(currentTrack);
-};
+nextBtn.onclick=()=>loadTrack((currentTrack+1)%playlist.length);
+prevBtn.onclick=()=>loadTrack((currentTrack-1+playlist.length)%playlist.length);
 
-prevBtn.onclick=()=>{
-currentTrack=(currentTrack-1+playlist.length)%playlist.length;
-loadTrack(currentTrack);
-};
+player.addEventListener("ended",()=>loadTrack((currentTrack+1)%playlist.length));
 
-player.addEventListener("timeupdate",()=>{
+player.ontimeupdate=()=>{
 const percent=(player.currentTime/player.duration)*100;
 fill.style.width=percent+"%";
-});
+};
 
 progress.onclick=e=>{
 const rect=progress.getBoundingClientRect();
@@ -396,37 +456,74 @@ const percent=(e.clientX-rect.left)/rect.width;
 player.currentTime=percent*player.duration;
 };
 
-player.addEventListener("ended",()=>{
-currentTrack=(currentTrack+1)%playlist.length;
-loadTrack(currentTrack);
-});
+volume.oninput=()=>player.volume=volume.value;
 
 /* ---------- FOLDERS ---------- */
 
-function openFolder(name){
+const folderContent=document.getElementById("folderContent");
+const backBtn=document.getElementById("folderBackBtn");
+const forwardBtn=document.getElementById("folderForwardBtn");
 
-const content=document.getElementById("folderContent");
+let folderHistory=["root"];
+let folderIndex=0;
 
-if(name==="aespo"){
-content.innerHTML=`
+function renderFolder(state){
+
+if(state==="root"){
+folderContent.innerHTML=`
+<div class="folder" data-open="aespo">
+<img src="assets/aespo.png"><br>aespo
+</div>
+<div class="folder" data-open="love">
+<img src="assets/folder.png"><br>&lt;3
+</div>`;
+}
+
+if(state==="aespo"){
+folderContent.innerHTML=`
 <h3>aespo</h3>
-<img src="assets/a1.jpg" class="thumb">
-<img src="assets/a2.jpg" class="thumb">
-<img src="assets/a3.jpg" class="thumb">
-<br><button onclick="location.reload()">back</button>
-`;
+<img src="assets/winter.png" class="thumb">
+<img src="assets/gissel.png" class="thumb">
+<img src="assets/ninnig.png" class="thumb">
+<img src="assets/karina.png" class="thumb">`;
 }
 
-if(name==="love"){
-content.innerHTML=`
+if(state==="love"){
+folderContent.innerHTML=`
 <h3>&lt;3</h3>
-<img src="assets/l1.jpg" class="thumb">
-<img src="assets/l2.jpg" class="thumb">
-<br><button onclick="location.reload()">back</button>
-`;
+<img src="assets/smile.png" class="thumb">
+<img src="assets/car.png" class="thumb">
+<img src="assets/garden.png" class="thumb">
+<img src="assets/Beka.png" class="thumb">`;
 }
 
+folderContent.querySelectorAll("[data-open]").forEach(el=>{
+el.onclick=()=>pushFolder(el.dataset.open);
+});
 }
+
+function pushFolder(state){
+folderHistory=folderHistory.slice(0,folderIndex+1);
+folderHistory.push(state);
+folderIndex++;
+renderFolder(state);
+}
+
+backBtn.onclick=()=>{
+if(folderIndex>0){
+folderIndex--;
+renderFolder(folderHistory[folderIndex]);
+}
+};
+
+forwardBtn.onclick=()=>{
+if(folderIndex<folderHistory.length-1){
+folderIndex++;
+renderFolder(folderHistory[folderIndex]);
+}
+};
+
+renderFolder("root");
 
 </script>
 
